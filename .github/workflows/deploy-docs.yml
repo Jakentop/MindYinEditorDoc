@@ -34,6 +34,9 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm docs:build
 
+      - name: Touch File Fix Bug
+        run: touch src/.vuepress/dist/.nojekyll
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:

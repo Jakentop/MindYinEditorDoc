@@ -15,7 +15,9 @@ export default hopeTheme({
 
   repo: "Jakentop/MindYinEditorDoc",
 
-  docsDir: "demo/theme-docs/src",
+  docsBranch: "master",
+
+  docsDir: "src",
 
   pageInfo: ["Author", "Original", "Date", "Category", "Tag", "ReadingTime"],
 
