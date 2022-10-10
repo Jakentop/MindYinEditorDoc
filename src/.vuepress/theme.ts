@@ -6,38 +6,24 @@ export default hopeTheme({
   hostname: "https://vuepress-theme-hope-docs-demo.netlify.app",
 
   author: {
-    name: "Mr.Hope",
-    url: "https://mrhope.site",
+    name: "Jaken"
   },
 
   iconAssets: "iconfont",
 
   logo: "/logo.svg",
 
-  repo: "vuepress-theme-hope/vuepress-theme-hope",
+  repo: "Jakentop/MindYinEditorDoc",
 
   docsDir: "demo/theme-docs/src",
 
   pageInfo: ["Author", "Original", "Date", "Category", "Tag", "ReadingTime"],
 
-  locales: {
-    "/": {
-      // navbar
-      navbar: zhNavbar,
 
-      // sidebar
-      sidebar: zhSidebar,
 
-      footer: "默认页脚",
+  navbar: zhNavbar,
 
-      displayFooter: true,
-
-      // page meta
-      metaLocales: {
-        editLink: "在 GitHub 上编辑此页",
-      },
-    },
-  },
+  sidebar: zhSidebar,
 
   encrypt: {
     config: {
@@ -54,11 +40,11 @@ export default hopeTheme({
       /**
        * Using Giscus
        */
-      // provider: "Giscus",
-      // repo: "vuepress-theme-hope/giscus-discussions",
-      // repoId: "R_kgDOG_Pt2A",
-      // category: "Announcements",
-      // categoryId: "DIC_kwDOG_Pt2M4COD69",
+      provider: "Giscus",
+      repo: "Jakentop/MindYinEditorDoc",
+      repoId: "R_kgDOIK0H-Q",
+      category: "General",
+      categoryId: "DIC_kwDOIK0H-c4CR5Gr",
 
       /**
        * Using Twikoo
@@ -69,8 +55,8 @@ export default hopeTheme({
       /**
        * Using Waline
        */
-      provider: "Waline",
-      serverURL: "https://vuepress-theme-hope-comment.vercel.app",
+      // provider: "Waline",
+      // serverURL: "https://vuepress-theme-hope-comment.vercel.app",
     },
 
     // Disable features you don't want here
