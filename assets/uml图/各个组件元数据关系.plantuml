@@ -1,0 +1,73 @@
+@startuml
+
+
+
+class SourceObj << 资源对象 >> extends CommonMeta
+{
++String id; // 唯一标识
++SourceTypeEnum sourceType; // 资源类型
+{field}+IoInfo ioInfo; // IO物理操作对象(片段对象为空)
++String name; // 资源对象名称
++List<String> tags; // 资源对象标签
++List<RefSourceObj> refSourceObj; // 关联的资源对象
+}
+
+class JudgeObj << 片段对象 >> extends SourceObj 
+{
++SourceObj originalSource; // 关联的资源对象
+}
+
+class RefSourceObj <<资源对象的关联/引用对象>> extends CommonMeta
+{
++SourceObj sourceObj; // 关联资源对象
++Integer type; // 类型关联/引用
+}
+SourceObj o-- RefSourceObj
+
+class IoInfo <<IO物理操作对象>> {
++IoTypeEnum ioType; // IO类型
++SourcePath sourcePath; // IO路径对象
++SourceIoMeta sourceIoMeta; // IO对象元数据
+}
+
+IoInfo o-- IoTypeEnum
+IoInfo o-- SourcePath
+IoInfo o-- SourceIoMeta
+
+class SourcePath <<IO路径对象>>
+{
+  +IOTypeEnum ioType; // IO类型
+  +String sourceName; // 资源物理名称
+  +String sourcePath; // 资源物理路径
+  +Map<String,String> extParam; //扩展字段
+}
+
+class SourceIoMeta <<IO对象元数据>> extends CommonMeta
+{
+  +Float size; // 数据大小
+  +String sizeUnit; // 数据单位
+}
+
+class CommonMeta <<通用元数据>>
+{
+  +Date createTime; // 创建时间
+  +Date modifyTime; // 修改时间
+  +String createUser; // 创建人
+  +String modifyUser; // 修改人
+  +Boolean delFlag; // 删除/不可用标
+}
+
+
+enum SourceTypeEnum <<资源类型枚举>>{
+  Markdown;
+  MindNode;
+  Pdf;
+  Image;
+}
+
+enum IoTypeEnum <<物理IO类型>>{
+  File; // 文件接口
+  Sql; // 数据库接口
+  Network; // 网络接口
+  Memory; // 内存接口
+}
