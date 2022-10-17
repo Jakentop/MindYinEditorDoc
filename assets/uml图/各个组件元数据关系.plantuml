@@ -1,16 +1,17 @@
 @startuml
 
-
-
 class SourceObj << 资源对象 >> extends CommonMeta
 {
 +String id; // 唯一标识
 +SourceTypeEnum sourceType; // 资源类型
-{field}+IoInfo ioInfo; // IO物理操作对象(片段对象为空)
+{field}+IoObj ioObj; // IO物理操作对象(片段对象为空)
 +String name; // 资源对象名称
 +List<String> tags; // 资源对象标签
 +List<RefSourceObj> refSourceObj; // 关联的资源对象
 }
+
+SourceObj *-- IoObj
+SourceObj *-- SourceTypeEnum
 
 class JudgeObj << 片段对象 >> extends SourceObj 
 {
@@ -22,17 +23,19 @@ class RefSourceObj <<资源对象的关联/引用对象>> extends CommonMeta
 +SourceObj sourceObj; // 关联资源对象
 +Integer type; // 类型关联/引用
 }
-SourceObj o-- RefSourceObj
+SourceObj *-- RefSourceObj
 
-class IoInfo <<IO物理操作对象>> {
+class IoObj <<IO物理操作对象>> {
 +IoTypeEnum ioType; // IO类型
 +SourcePath sourcePath; // IO路径对象
 +SourceIoMeta sourceIoMeta; // IO对象元数据
++List<DataCopies> dataCopies; // 打开的物理数据块
 }
 
-IoInfo o-- IoTypeEnum
-IoInfo o-- SourcePath
-IoInfo o-- SourceIoMeta
+IoObj *-- IoTypeEnum
+IoObj *-- SourcePath
+IoObj *-- SourceIoMeta
+IoObj *-- DataCopies 
 
 class SourcePath <<IO路径对象>>
 {
@@ -45,6 +48,7 @@ class SourcePath <<IO路径对象>>
 class SourceIoMeta <<IO对象元数据>> extends CommonMeta
 {
   +Float size; // 数据大小
+  +Long pos; // 起始位置(部分IO数据块时有值)
   +String sizeUnit; // 数据单位
 }
 
@@ -55,6 +59,7 @@ class CommonMeta <<通用元数据>>
   +String createUser; // 创建人
   +String modifyUser; // 修改人
   +Boolean delFlag; // 删除/不可用标
+  +Map extParam; // 通用额外参数
 }
 
 
@@ -70,4 +75,14 @@ enum IoTypeEnum <<物理IO类型>>{
   Sql; // 数据库接口
   Network; // 网络接口
   Memory; // 内存接口
+}
+
+class DataCopies<E extends Serializable> <<数据副本容器>>
+{
+  +E data; // 容器value
+  +SourceMeta; // 容器副本的元数据
+  +E get(); // 获取全部值
+  +String toString(); // 转换string
+  +String hashCode(); // 物理资源的HashCode
+  +byte[] getByte(); // 物理资源的二进制
 }

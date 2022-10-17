@@ -1,0 +1,28 @@
+@startuml 物理IO设计
+
+abstract PhysicalData<E extends Serializable> <<物理容器>>
+{
+  +E data; // 容器value
+  +long size; // value大小
+  +long pos; // 开始游标
+  +Map extParam; // 额外数据Map
+  +E get(); // 获取全部值
+  +String toString(); // 转换string
+  +String hashCode(); // 物理资源的HashCode
+  +byte[] getByte(); // 物理资源的二进制
+}
+
+
+
+interface SimpleIO<E extends PhysicalData> <<基础物理IO接口>>
+{
+  +E getAllByIoInfo(IoInfo ioInfo) // 通过IoInfo对象获取完整信息
+  +E getByIoInfo(IoInfo ioInfo,int size,int pos) // 通过IoInfo对象获取部分信息
+  updateByIoInfo(IoInfo ioInfo,E data) // 通过IoInfo完整更新数据
+}
+
+interface SimpleMetaIO <<基础元数据操作接口>>
+{
+  +SourceIoMeta getMetaByIoInfo(IoTypeEnum ioType,SourcePath sourcePath) // 通过sourcePath获取元数据
+  +IoInfo updateMetaByIoInfo(IoInfo ioInfo) // 通过IoInfo更新元数据
+}
