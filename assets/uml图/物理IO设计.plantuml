@@ -1,28 +1,27 @@
 @startuml 物理IO设计
 
-abstract PhysicalData<E extends Serializable> <<物理容器>>
-{
-  +E data; // 容器value
-  +long size; // value大小
-  +long pos; // 开始游标
-  +Map extParam; // 额外数据Map
-  +E get(); // 获取全部值
-  +String toString(); // 转换string
-  +String hashCode(); // 物理资源的HashCode
-  +byte[] getByte(); // 物理资源的二进制
+
+interface BasicResourceInfo <<资源对象处理接口>> {
+  +ResourceInfo createOne(ResourceInfo resourceInfo) // 创建一个资源对象,如果设置了物理io等需要做额外处理
+  +ResourceInfo refResourceInfo(ResourceInfo source,RefResourceInfo ref) // 关联一个资源对象
+  +ResourceInfo refResourceInfo(ResourceInfo source,List<RefResourceInfo> ref) // 关联多个资源对象
+  +ResourceInfo updateResourceInfo(ResourceInfo resourceInfo) // 更新资源对象信息（将内存中的覆盖到磁盘中）
+  +ResourceInfo flushResourceInfo(ResourceInfo resourceInfo) // 刷新资源对象信息（将内存中和磁盘中的合并）
+  +JudgeObj createJudge(List<ResourceInfo> resourceInfo) // 创建一个空的片段对象（在末尾创建）
+  +JudgeObj createJudge(List<ResourceInfo> resourceInfo,JudgeObj judgeObj) // 在该片段对象下面追加一个
+  +JudgeObj createJudge(List<ResourceInfo> resourceInfo,Long pos) // 在第n个片段对象下面追加一个
+  +List<JudgeObj> analysisJudge(ResourceInfo resourceInfo) // 解析某个资源对象中的所有片段（单层）
+  +Boolean deleteResourceInfo(resourceInfo,boolean isPhysical) // 删除某个资源对象(isPhysical为true标识物理删除)
 }
 
-
-
-interface SimpleIO<E extends PhysicalData> <<基础物理IO接口>>
-{
-  +E getAllByIoInfo(IoInfo ioInfo) // 通过IoInfo对象获取完整信息
-  +E getByIoInfo(IoInfo ioInfo,int size,int pos) // 通过IoInfo对象获取部分信息
-  updateByIoInfo(IoInfo ioInfo,E data) // 通过IoInfo完整更新数据
-}
-
-interface SimpleMetaIO <<基础元数据操作接口>>
-{
-  +SourceIoMeta getMetaByIoInfo(IoTypeEnum ioType,SourcePath sourcePath) // 通过sourcePath获取元数据
-  +IoInfo updateMetaByIoInfo(IoInfo ioInfo) // 通过IoInfo更新元数据
+interface BasicIoObj <<基础IO能力>> {
+  +IoObj createOne(SourcePath sourcePath,IoTypeEnum ioType) // 创建一个Io对象(如果存在则打开这个文件)
+  +IoObj openOne(SourcePath sourcePath,IoTypeEnum ioType) // 打开一个Io对象(如果不存在则报错)
+  +List<DataCopies> getByIoObj(SourcePath sourcePath,Function<DataCopies,List<DataCopies>> split) //获取数据副本,按照特定方式拆分
+  +List<DataCopies> getByIoObj(SourcePath sourcePath) //获取数据副本，获取完整的数据副本
+  +List<DataCopies> readByIoObj(Function<SourcePath,List<DataCopies>> readWay) //获取数据副本,按照特定方式获取
+  +void getByIoObj(IoObj ioObj)// 获取并填充数据副本
+  +flushIoObj(IoObj ioObj)// 刷新数据副本（写入内存的，并合并磁盘改动）
+  +saveIoObj(IoObj ioObj)// 覆盖数据副本（直接以内存为准）
+  +deleteIoObj(IoObj ioObj)// 删除某一个物理操作对象
 }

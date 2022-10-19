@@ -81,6 +81,7 @@ class DataCopies<E extends Serializable> <<数据副本容器>>
 {
   +E data; // 容器value
   +SourceMeta; // 容器副本的元数据
+  +Map<String,String> extParam; // 额外数据
   +E get(); // 获取全部值
   +String toString(); // 转换string
   +String hashCode(); // 物理资源的HashCode
